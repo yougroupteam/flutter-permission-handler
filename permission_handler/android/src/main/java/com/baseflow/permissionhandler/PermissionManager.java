@@ -139,23 +139,10 @@ final class PermissionManager {
 
             ongoing = true;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (activity instanceof FragmentActivity) {
-                    Fragment fragment = ((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag("flutter_fragment");
-                    if (fragment != null) {
-                        fragment.requestPermissions(requestPermissions, PermissionConstants.PERMISSION_CODE);
-                    }
-                } else {
-                    activity.requestPermissions(
-                            requestPermissions,
-                            PermissionConstants.PERMISSION_CODE);
-                }
-            } else {
-                ActivityCompat.requestPermissions(
-                        activity,
-                        requestPermissions,
-                        PermissionConstants.PERMISSION_CODE);
-            }
+            ActivityCompat.requestPermissions(
+                    activity,
+                    requestPermissions,
+                    PermissionConstants.PERMISSION_CODE);
         } else {
             ongoing = false;
             if (requestResults.size() > 0) {
