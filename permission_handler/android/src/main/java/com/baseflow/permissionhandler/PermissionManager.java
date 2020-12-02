@@ -12,7 +12,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
@@ -143,22 +143,20 @@ final class PermissionManager {
             ongoing = true;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (activity instanceof FragmentActivity) {
-                    Fragment fragment = ((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag("flutter_fragment");
+                if (activity instanceof AppCompatActivity) {
+                    FragmentActivity fa = (FragmentActivity) activity;
+                    Fragment fragment = fa.getSupportFragmentManager().findFragmentByTag("flutter_fragment");
                     if (fragment != null) {
                         fragment.requestPermissions(requestPermissions, PermissionConstants.PERMISSION_CODE);
+                        return;
                     }
-                } else {
-                    activity.requestPermissions(
-                            requestPermissions,
-                            PermissionConstants.PERMISSION_CODE);
                 }
-            } else {
-                ActivityCompat.requestPermissions(
-                        activity,
-                        requestPermissions,
-                        PermissionConstants.PERMISSION_CODE);
             }
+
+            ActivityCompat.requestPermissions(
+                    activity,
+                    requestPermissions,
+                    PermissionConstants.PERMISSION_CODE);
         } else {
             ongoing = false;
             if (requestResults.size() > 0) {
